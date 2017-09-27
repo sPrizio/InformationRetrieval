@@ -63,10 +63,10 @@ public class FileParser {
      * Reads file and stores its contents
      */
     private void readFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.file))) {
             String line;
 
-            // read file contents
+            // reads file contents
             while ((line = br.readLine()) != null) {
                 this.text.append(line);
             }
@@ -92,5 +92,28 @@ public class FileParser {
         }
     }
 
-    //private void
+    /**
+     * Gets all titles for each Reuter's article
+     *
+     * @param text - file's contents
+     * @return string of all document titles
+     */
+    private String findDocumentTitles(String text) {
+        StringBuilder titles = new StringBuilder();
+        Pattern pattern = Pattern.compile("<TITLE>([\\s\\S]*?)</TITLE>");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            titles.append(matcher.group(1));
+            titles.append(' ');
+        }
+
+        String list = titles.toString();
+
+        //  removes all non word characters
+        list = list.replaceAll("[^\\w*\\s]", "");
+        list = list.replaceAll("lt\\w*", "");
+
+        return list;
+    }
 }
