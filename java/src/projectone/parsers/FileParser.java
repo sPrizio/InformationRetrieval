@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Parses an sgm file to obtain key information
@@ -63,11 +65,32 @@ public class FileParser {
     private void readFile() {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
+
+            // read file contents
             while ((line = br.readLine()) != null) {
                 this.text.append(line);
             }
+
+            //  gets document ids
+            findDocumentIds(this.text.toString());
         } catch (IOException e) {
             logger.info("File not found.");
         }
     }
+
+    /**
+     * Gets each id of the Reuter's articles
+     *
+     * @param text file's contents
+     */
+    private void findDocumentIds(String text) {
+        Pattern pattern = Pattern.compile("NEWID=\"(\\d*)\"");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            this.documentIds.add(Integer.parseInt(matcher.group(1)));
+        }
+    }
+
+    //private void
 }
