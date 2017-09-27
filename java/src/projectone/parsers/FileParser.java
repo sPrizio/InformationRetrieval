@@ -56,6 +56,21 @@ public class FileParser {
         return this.documentIds;
     }
 
+    /**
+     * Returns tokens as a string
+     *
+     * @return string containing title and body tokens
+     */
+    public String getTokens() {
+       String tokens = "";
+
+       tokens += findDocumentTitles(this.text.toString());
+       tokens += " ";
+       tokens += findDocumentBodies(this.text.toString());
+
+       return tokens;
+    }
+
 
     //  HELPERS
 
