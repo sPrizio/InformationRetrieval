@@ -116,4 +116,30 @@ public class FileParser {
 
         return list;
     }
+
+    /**
+     * Gets each article body
+     *
+     * @param text - file's contents
+     * @return string of all document bodies
+     */
+    private String findDocumentBodies(String text) {
+        StringBuilder bodies = new StringBuilder();
+        Pattern pattern = Pattern.compile("<BODY>([\\s\\S]*?)</BODY>");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            bodies.append(matcher.group(1));
+            bodies.append(' ');
+        }
+
+        String list = bodies.toString();
+
+        //  removes all non word characters
+        list = list.replaceAll("\\w*&lt;\\w*\\s*\\w* | &lt;\\w*\\s\\w*\\s*\\w*> | Reuter\\S*; | REUTER\\S*", " ");
+        list = list.replaceAll("\\w*>", " ");
+        list = list.replaceAll("&lt;", " ");
+
+        return list;
+    }
 }
