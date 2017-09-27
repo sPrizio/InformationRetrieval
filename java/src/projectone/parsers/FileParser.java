@@ -26,6 +26,7 @@ public class FileParser {
 
     /**
      * Regular constructor that creates a parser for a specific file
+     *
      * @param fileName - name of file to be parsed
      */
     public FileParser(String fileName) {
