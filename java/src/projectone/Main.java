@@ -13,6 +13,5 @@ public class Main {
         logger.info("Hello World!");
 
         FileParser fileParser = new FileParser("java/resources/sgm/reut2-000.sgm");
-        logger.info(fileParser.getTokens());
     }
 }

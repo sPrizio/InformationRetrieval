@@ -11,6 +11,7 @@ import java.util.List;
 public class Term {
     private String value;
     private ArrayList<String> postingsList;
+    private int termId;
 
     /**
      * Regular constructor taking a value for this term's string
@@ -20,6 +21,7 @@ public class Term {
     public Term(String v) {
         this.value = v;
         this.postingsList = new ArrayList<>();
+        this.termId = v.hashCode();
     }
 
 
@@ -31,5 +33,9 @@ public class Term {
 
     public List<String> getPostingsList() {
         return this.postingsList;
+    }
+
+    public int getTermId() {
+        return termId;
     }
 }
