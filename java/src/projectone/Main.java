@@ -14,7 +14,7 @@ public class Main {
         logger.info("Hello World!");
 
         FileParser fileParser = new FileParser("java/resources/sgm/reut2-000.sgm");
-        Tokenizer tokenizer = new Tokenizer(fileParser.getTokensString());
+        Tokenizer tokenizer = new Tokenizer(fileParser.getTokensAsString());
         System.out.println(tokenizer.getTokens());
     }
 }
