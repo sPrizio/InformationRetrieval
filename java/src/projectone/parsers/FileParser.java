@@ -62,7 +62,7 @@ public class FileParser {
      *
      * @return string containing title and body tokens
      */
-    public String getTokens() {
+    public String getTokensString() {
        String tokens = "";
 
        tokens += findDocumentTitles(this.text.toString());
