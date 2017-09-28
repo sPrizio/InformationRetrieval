@@ -19,7 +19,7 @@ public class Tokenizer {
     }
 
     /**
-     * Returns an list of tokens
+     * Returns a list of tokens
      *
      * @return list of tokens from file
      */
@@ -28,6 +28,18 @@ public class Tokenizer {
             tokens.add(stringTokenizer.nextToken());
         }
         return tokens;
+    }
+
+
+    //  HELPERS
+
+    /**
+     * Optional: remove all cases in the tokens
+     */
+    private void normalizeCaps() {
+        while (stringTokenizer.hasMoreTokens()) {
+            tokens.add(stringTokenizer.nextToken().toLowerCase());
+        }
     }
 
 
