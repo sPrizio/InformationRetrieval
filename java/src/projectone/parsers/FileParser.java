@@ -85,6 +85,7 @@ public class FileParser {
             // reads file contents
             while ((line = br.readLine()) != null) {
                 this.text.append(line);
+                this.text.append(' ');
             }
 
             //  gets document ids
