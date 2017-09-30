@@ -1,8 +1,6 @@
 package projectone.tokenizer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Responsible for term tokenization and normalization
@@ -10,36 +8,58 @@ import java.util.StringTokenizer;
  * @author Stephen Prizio
  */
 public class Tokenizer {
-    private StringTokenizer stringTokenizer;
     private ArrayList<String> tokens;
 
-    public Tokenizer(String someText) {
-        stringTokenizer = new StringTokenizer(someText);
-        tokens = new ArrayList<>(stringTokenizer.countTokens());
+    public Tokenizer() {
+        tokens = new ArrayList<>();
     }
 
     /**
-     * Returns a list of tokens
+     * Returns a list of tokens, without duplicates
      *
      * @return list of tokens from file
      */
-    public List<String> getTokens() {
+    public List<String> getTokens(String text) {
+        StringTokenizer stringTokenizer = new StringTokenizer(text);
         while (stringTokenizer.hasMoreTokens()) {
-            tokens.add(stringTokenizer.nextToken());
+            this.tokens.add(stringTokenizer.nextToken());
         }
-        return tokens;
-    }
+        Set<String> strings = new HashSet<>();
+        strings.addAll(this.tokens);
+        this.tokens.clear();
+        this.tokens.addAll(strings);
 
-    //  HELPERS
+        return this.tokens;
+    }
 
     /**
-     * Optional: remove all cases in the tokens
+     * Case folding algorithm, removes all capitalization from tokens
+     *
+     * @param tokens - list of tokens extracted from a document
+     * @return list of tokens, all lowercase
      */
-    private void normalizeCaps() {
-        while (stringTokenizer.hasMoreTokens()) {
-            tokens.add(stringTokenizer.nextToken().toLowerCase());
+    public List<String> removeCaps(List<String> tokens) {
+        List<String> temp = new ArrayList<>();
+        for (String s : tokens) {
+            temp.add(s.toLowerCase());
         }
+
+        return temp;
     }
 
+    /**
+     * Algorithm that removes standard punctuation from tokens
+     *
+     * @param tokens - list of tokens extracted from a document
+     * @return list of tokens without punctuation
+     */
+    public List<String> removePunctuation(List<String> tokens) {
+        List<String> temp = new ArrayList<>();
+        for (String s : tokens) {
+            temp.add(s.replaceAll("[\\W*]", " ").trim());
+        }
 
+        return temp;
+    }
 }
+//\d{4}|\/\d{2}

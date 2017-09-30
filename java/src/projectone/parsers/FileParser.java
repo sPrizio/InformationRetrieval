@@ -147,7 +147,7 @@ public class FileParser {
     }
 
     /**
-     * Parses the file for docuements demarcated by <REUTERS></REUTERS> tags
+     * Parses the file for documents demarcated by <REUTERS></REUTERS> tags
      * @param text - raw file text
      */
     private void findDocuments(String text) {
