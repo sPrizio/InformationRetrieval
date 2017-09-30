@@ -3,6 +3,7 @@ package projectone.parsers;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import projectone.entity.Document;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,7 +23,7 @@ public class FileParser {
     private Logger logger = Logger.getLogger(FileParser.class);
     private File file;
     private StringBuilder text;
-    private ArrayList<Integer> documentIds;
+    private ArrayList<Document> documents;
 
     /**
      * Regular constructor that creates a parser for a specific file
@@ -34,7 +35,7 @@ public class FileParser {
 
         this.file = new File(fileName);
         this.text = new StringBuilder();
-        this.documentIds = new ArrayList<>();
+        this.documents = new ArrayList<>();
 
         readFile();     //  reads file on construction to get file's contents
     }
@@ -49,27 +50,12 @@ public class FileParser {
     }
 
     /**
-     * Returns a list of all document ids in this file
+     * Returns a list of documents in this file
      *
-     * @return list of document ids
+     * @return list of documents
      */
-    public List<Integer> getDocumentIds() {
-        return this.documentIds;
-    }
-
-    /**
-     * Returns tokens as a string
-     *
-     * @return string containing title and body tokens
-     */
-    public String getTokens() {
-       String tokens = "";
-
-       tokens += findDocumentTitles(this.text.toString());
-       tokens += " ";
-       tokens += findDocumentBodies(this.text.toString());
-
-       return tokens;
+    public List<Document> getDocuments() {
+        return this.documents;
     }
 
 
@@ -88,75 +74,88 @@ public class FileParser {
                 this.text.append(' ');
             }
 
-            //  gets document ids
-            findDocumentIds(this.text.toString());
+            findDocuments(this.text.toString());
         } catch (IOException e) {
             logger.info("File not found.");
         }
     }
 
     /**
-     * Gets each id of the Reuter's articles
+     * Reads raw document and extracts id
      *
-     * @param text file's contents
+     * @param text - raw document
+     * @return document id
      */
-    private void findDocumentIds(String text) {
+    private int matchID(String text) {
         Pattern pattern = Pattern.compile("NEWID=\"(\\d*)\"");
         Matcher matcher = pattern.matcher(text);
 
-        while (matcher.find()) {
-            this.documentIds.add(Integer.parseInt(matcher.group(1)));
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group(1));
         }
+
+        return 0;
     }
 
     /**
-     * Gets all titles for each Reuter's article
+     * Reads raw document and extracts title
      *
-     * @param text - file's contents
-     * @return string of all document titles
+     * @param text - raw document
+     * @return document title
      */
-    private String findDocumentTitles(String text) {
-        StringBuilder titles = new StringBuilder();
+    private String matchTitle(String text) {
+        StringBuilder titleBuilder = new StringBuilder();
         Pattern pattern = Pattern.compile("<TITLE>([\\s\\S]*?)</TITLE>");
         Matcher matcher = pattern.matcher(text);
 
-        while (matcher.find()) {
-            titles.append(matcher.group(1));
-            titles.append(' ');
+        if (matcher.find()) {
+            titleBuilder.append(matcher.group(1));
         }
 
-        String list = titles.toString();
+        String titleClean = titleBuilder.toString();
 
         //  removes all non word characters
-        list = list.replaceAll("[^\\w*\\s]", "");
-        list = list.replaceAll("lt\\w*", "");
+        titleClean = titleClean.replaceAll("[^\\w*\\s]", "");
+        titleClean = titleClean.replaceAll("lt\\w*", "");
 
-        return list;
+        return titleClean;
     }
 
     /**
-     * Gets each article body
+     * Reads raw document and extracts body
      *
-     * @param text - file's contents
-     * @return string of all document bodies
+     * @param text - raw document
+     * @return document body
      */
-    private String findDocumentBodies(String text) {
-        StringBuilder bodies = new StringBuilder();
+    private String matchBody(String text) {
+        StringBuilder bodyBuilder = new StringBuilder();
         Pattern pattern = Pattern.compile("<BODY>([\\s\\S]*?)</BODY>");
         Matcher matcher = pattern.matcher(text);
 
-        while (matcher.find()) {
-            bodies.append(matcher.group(1));
-            bodies.append(' ');
+        if (matcher.find()) {
+            bodyBuilder.append(matcher.group(1));
         }
 
-        String list = bodies.toString();
+        String bodyClean = bodyBuilder.toString();
 
         //  removes all non word characters
-        list = list.replaceAll("\\w*&lt;\\w*\\s*\\w* | &lt;\\w*\\s\\w*\\s*\\w*> | Reuter\\S*; | REUTER\\S*", " ");
-        list = list.replaceAll("\\w*>", " ");
-        list = list.replaceAll("&lt;", " ");
+        bodyClean = bodyClean.replaceAll("\\w*&lt;\\w*\\s*\\w* | &lt;\\w*\\s\\w*\\s*\\w*> | Reuter\\S*; | REUTER\\S* | Reuter\\s*\\S*;", " ");
+        bodyClean = bodyClean.replaceAll("\\w*>", " ");
+        bodyClean = bodyClean.replaceAll("&lt;", " ");
 
-        return list;
+        return bodyClean;
+    }
+
+    /**
+     * Parses the file for docuements demarcated by <REUTERS></REUTERS> tags
+     * @param text - raw file text
+     */
+    private void findDocuments(String text) {
+        Pattern reuters = Pattern.compile("<REUTERS([\\s\\S]*?)<\\/REUTERS>");
+        Matcher reutersMatcher = reuters.matcher(text);
+
+        while (reutersMatcher.find()) {
+            this.documents.add(new Document(matchID(reutersMatcher.group(1)), matchTitle(reutersMatcher.group(1)), matchBody(reutersMatcher.group(1))));
+        }
     }
 }
