@@ -12,5 +12,6 @@ public class Main {
         BasicConfigurator.configure();
 
         FileParser fileParser = new FileParser("java/resources/sgm/reut2-000.sgm");
+        System.out.print(fileParser.getDocuments().get(3).getDocumentBody());
     }
 }
