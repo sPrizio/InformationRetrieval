@@ -10,7 +10,8 @@ import java.util.List;
  */
 public class Term {
     private String value;
-    private ArrayList<String> postingsList;
+    private ArrayList<Integer> postingsList;
+    private int termId;
 
     /**
      * Regular constructor taking a value for this term's string
@@ -20,16 +21,49 @@ public class Term {
     public Term(String v) {
         this.value = v;
         this.postingsList = new ArrayList<>();
+        this.termId = v.hashCode();
     }
 
 
     //  ACCESSORS
 
+    /**
+     * Returns the string value of this term
+     *
+     * @return term's string
+     */
     public String getValue() {
         return this.value;
     }
 
-    public List<String> getPostingsList() {
+    /**
+     * Returns the list of documents in which this term occurs
+     *
+     * @return list of document id's
+     */
+    public List<Integer> getPostingsList() {
         return this.postingsList;
+    }
+
+
+    /**
+     * Returns the id of this term
+     *
+     * @return term id
+     */
+    public int getTermId() {
+        return this.termId;
+    }
+
+
+    //  METHODS
+
+    /**
+     * Adds a document id to this term's postings list
+     *
+     * @param docId - document id to be added to the postings list
+     */
+    public void addToPostingsList(int docId) {
+        this.postingsList.add(docId);
     }
 }
