@@ -2,6 +2,7 @@ package projectone;
 
 
 import org.apache.log4j.BasicConfigurator;
+import org.tartarus.martin.Stemmer;
 import projectone.parsers.FileParser;
 import projectone.tokenizer.Tokenizer;
 
@@ -16,7 +17,9 @@ public class Main {
 
         FileParser fileParser = new FileParser("java/resources/sgm/reut2-000.sgm");
         List<String> strings = fileParser.getDocuments().get(0).getAllTokens();
+        strings = tokenizer.removeCaps(strings);
         strings = tokenizer.removePunctuation(strings);
+        strings = tokenizer.stem(strings);
         System.out.println(strings);
     }
 }

@@ -1,5 +1,7 @@
 package projectone.tokenizer;
 
+import org.tartarus.martin.Stemmer;
+
 import java.util.*;
 
 /**
@@ -9,9 +11,11 @@ import java.util.*;
  */
 public class Tokenizer {
     private ArrayList<String> tokens;
+    private Stemmer stemmer;
 
     public Tokenizer() {
         tokens = new ArrayList<>();
+        stemmer = new Stemmer();
     }
 
     /**
@@ -59,7 +63,23 @@ public class Tokenizer {
             temp.add(s.replaceAll("[\\W*]", " ").trim());
         }
 
+        tokens.clear();
+
+        for (String s : temp) {
+            tokens.add(s.replaceAll("[\\s*]", "-"));
+        }
+
+        return tokens;
+    }
+
+    public List<String> stem(List<String> tokens) {
+        List<String> temp = new ArrayList<>();
+        for (String s : tokens) {
+            this.stemmer.add(s.toCharArray(), s.length());
+            this.stemmer.stem();
+            temp.add(this.stemmer.toString());
+        }
+
         return temp;
     }
 }
-//\d{4}|\/\d{2}
