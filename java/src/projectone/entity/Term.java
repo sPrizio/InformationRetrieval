@@ -45,7 +45,6 @@ public class Term {
         return this.postingsList;
     }
 
-
     /**
      * Returns the id of this term
      *
@@ -65,5 +64,29 @@ public class Term {
      */
     public void addToPostingsList(int docId) {
         this.postingsList.add(docId);
+    }
+
+    public void addToPostingsList(List<Integer> docIds) {
+        this.postingsList.addAll(docIds);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.value.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object t) {
+        if (t instanceof Term && this.hashCode() == t.hashCode()) {
+            this.addToPostingsList(((Term) t).postingsList);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return (this.value + "--" + this.postingsList);
     }
 }

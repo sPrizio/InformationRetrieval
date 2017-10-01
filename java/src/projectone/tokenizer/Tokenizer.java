@@ -72,6 +72,12 @@ public class Tokenizer {
         return tokens;
     }
 
+    /**
+     * Uses porter stemming to retrieve morphological root of each token
+     *
+     * @param tokens - list of tokens extracted from document
+     * @return list of tokens each of which is their morphological root
+     */
     public List<String> stem(List<String> tokens) {
         List<String> temp = new ArrayList<>();
         for (String s : tokens) {

@@ -15,6 +15,7 @@ public class Document {
     private String title;
     private String body;
     private Tokenizer tokenizer;
+    private List<Term> terms;
 
     /**
      * Regular constructor that builds a document with an id, title and some text
@@ -28,6 +29,7 @@ public class Document {
         this.title = title;
         this.body = body;
         this.tokenizer = new Tokenizer();
+        this.terms = new ArrayList<>();
     }
 
 
@@ -54,6 +56,32 @@ public class Document {
         merged.addAll(bodies);
 
         return merged;
+    }
+
+    /**
+     * Returns a list of terms
+     *
+     * @return list of terms
+     */
+    public List<Term> getAllTerms() {
+        List<String> titles = this.tokenizer.getTokens(this.title);
+        List<String> bodies = this.tokenizer.getTokens(this.body);
+
+        List<String> merged = new ArrayList<>();
+        merged.addAll(titles);
+        merged.addAll(bodies);
+
+        merged = tokenizer.removeCaps(merged);
+        merged = tokenizer.removePunctuation(merged);
+        merged = tokenizer.stem(merged);
+
+        for (String s : merged) {
+            Term term = new Term(s);
+            term.addToPostingsList(this.documentID);
+            this.terms.add(term);
+        }
+
+        return this.terms;
     }
 
 }
