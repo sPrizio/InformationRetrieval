@@ -1,7 +1,6 @@
 package projectone.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a term taken from a textual document
@@ -10,8 +9,7 @@ import java.util.List;
  */
 public class Term {
     private String value;
-    private ArrayList<Integer> postingsList;
-    private int termId;
+    private Set<Integer> postingsList;
 
     /**
      * Regular constructor taking a value for this term's string
@@ -20,8 +18,7 @@ public class Term {
      */
     public Term(String v) {
         this.value = v;
-        this.postingsList = new ArrayList<>();
-        this.termId = v.hashCode();
+        this.postingsList = new TreeSet<>();
     }
 
 
@@ -41,17 +38,8 @@ public class Term {
      *
      * @return list of document id's
      */
-    public List<Integer> getPostingsList() {
+    Set<Integer> getPostingsList() {
         return this.postingsList;
-    }
-
-    /**
-     * Returns the id of this term
-     *
-     * @return term id
-     */
-    public int getTermId() {
-        return this.termId;
     }
 
 
@@ -62,11 +50,11 @@ public class Term {
      *
      * @param docId - document id to be added to the postings list
      */
-    public void addToPostingsList(int docId) {
+    void addToPostingsList(int docId) {
         this.postingsList.add(docId);
     }
 
-    public void addToPostingsList(List<Integer> docIds) {
+    private void addToPostingsList(Set<Integer> docIds) {
         this.postingsList.addAll(docIds);
     }
 

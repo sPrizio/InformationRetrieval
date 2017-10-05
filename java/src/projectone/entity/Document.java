@@ -35,35 +35,12 @@ public class Document {
 
     //  ACCESSORS
 
-    public int getDocumentID() {
-        return documentID;
-    }
-
-    public String getDocumentTitle() {
-        return title;
-    }
-
-    public String getDocumentBody() {
-        return body;
-    }
-
-    public List<String> getAllTokens() {
-        List<String> titles = this.tokenizer.getTokens(this.title);
-        List<String> bodies = this.tokenizer.getTokens(this.body);
-
-        List<String> merged = new ArrayList<>();
-        merged.addAll(titles);
-        merged.addAll(bodies);
-
-        return merged;
-    }
-
     /**
      * Returns a list of terms
      *
      * @return list of terms
      */
-    public List<Term> getAllTerms() {
+    List<Term> getAllTerms() {
         List<String> titles = this.tokenizer.getTokens(this.title);
         List<String> bodies = this.tokenizer.getTokens(this.body);
 
