@@ -75,10 +75,10 @@ public class Term {
         return this.value.hashCode();
     }
 
-    @Override
+   @Override
     public boolean equals(Object t) {
-        if (t instanceof Term && this.hashCode() == t.hashCode()) {
-            this.addToPostingsList(((Term) t).postingsList);
+        if (t instanceof Term && this.value.equalsIgnoreCase(((Term) t).value)) {
+            this.addToPostingsList(((Term) t).getPostingsList());
             return true;
         }
 
@@ -87,6 +87,6 @@ public class Term {
 
     @Override
     public String toString() {
-        return (this.value + "--" + this.postingsList);
+        return (this.value + " - " + this.postingsList);
     }
 }

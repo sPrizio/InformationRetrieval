@@ -19,7 +19,7 @@ public class Tokenizer {
     }
 
     /**
-     * Returns a list of tokens, without duplicates
+     * Returns a list of tokens
      *
      * @return list of tokens from file
      */
@@ -28,10 +28,6 @@ public class Tokenizer {
         while (stringTokenizer.hasMoreTokens()) {
             this.tokens.add(stringTokenizer.nextToken());
         }
-        Set<String> strings = new HashSet<>();
-        strings.addAll(this.tokens);
-        this.tokens.clear();
-        this.tokens.addAll(strings);
 
         return this.tokens;
     }

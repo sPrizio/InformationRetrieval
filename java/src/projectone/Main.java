@@ -6,10 +6,7 @@ import projectone.entity.Document;
 import projectone.entity.Term;
 import projectone.parsers.FileParser;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Main {
@@ -17,21 +14,24 @@ public class Main {
         Logger logger = Logger.getLogger(Main.class.getName());
         BasicConfigurator.configure();
 
-        Set<Term> docTerms = new HashSet<>();
-        ArrayList<Term> test = new ArrayList<>();
+        List<Term> docTerms = new ArrayList<>();
+        List<Term> docTerms2 = new ArrayList<>();
+        List<Term> test = new ArrayList<>();
+        Set<Term> terms = new HashSet<>();
 
         FileParser fileParser = new FileParser("java/resources/sgm/reut2-000.sgm");
         List<Document> documents = fileParser.getDocuments();
 
+        Hashtable<Term, List<Integer>> dictionary = new Hashtable<>();
+
         for (Document document : documents) {
             docTerms.addAll(document.getAllTerms());
-            test.addAll(document.getAllTerms());
         }
 
-        /*for (Term t : docTerms) {
-            System.out.println(t);
-        }*/
+        for (Term t : docTerms) {
+            dictionary.put(t, t.getPostingsList());
+        }
 
-        System.out.println(test);
+        System.out.println(dictionary);
     }
 }
