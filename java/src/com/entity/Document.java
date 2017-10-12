@@ -36,11 +36,20 @@ public class Document {
     //  ACCESSORS
 
     /**
+     * Returns the document id
+     *
+     * @return document id
+     */
+    public int getDocumentID() {
+        return this.documentID;
+    }
+
+    /**
      * Returns a list of terms
      *
      * @return list of terms
      */
-    List<Term> getAllTerms() {
+    public List<Term> getAllTerms() {
         List<String> titles = this.tokenizer.getTokens(this.title);
         List<String> bodies = this.tokenizer.getTokens(this.body);
 

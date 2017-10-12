@@ -1,9 +1,9 @@
 package com.parsers;
 
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import com.entity.Document;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +31,7 @@ public class FileParser {
      * @param fileName - name of file to be parsed
      */
     public FileParser(String fileName) {
-        BasicConfigurator.configure();  //  configures log4j logger
+        PropertyConfigurator.configure("java/resources/lib/log4j.properties");
 
         this.file = new File(fileName);
         this.text = new StringBuilder();
@@ -110,6 +110,8 @@ public class FileParser {
 
         if (matcher.find()) {
             titleBuilder.append(matcher.group(1));
+        } else {
+            return "";
         }
 
         String titleClean = titleBuilder.toString();
@@ -134,6 +136,8 @@ public class FileParser {
 
         if (matcher.find()) {
             bodyBuilder.append(matcher.group(1));
+        } else {
+            return "";
         }
 
         String bodyClean = bodyBuilder.toString();
@@ -147,6 +151,34 @@ public class FileParser {
     }
 
     /**
+     * Reads raw document and extracts text content, typically used when there aren't any <BODY></BODY> and <TEXT></TEXT> tags
+     *
+     * @param text - raw document
+     * @return document text
+     */
+    private String matchText(String text) {
+        StringBuilder textBuilder = new StringBuilder();
+        Pattern txt = Pattern.compile("<TEXT[\\s\\S]*?>([\\s\\S]*?)<\\/TEXT>");
+        Matcher txtMatcher = txt.matcher(text);
+
+        if (txtMatcher.find()) {
+            textBuilder.append(txtMatcher.group(1));
+        } else {
+            return "";
+        }
+
+        String textClean = textBuilder.toString();
+
+        //  removes all non word characters
+        textClean = textClean.replaceAll("[^\\w*\\s]", " ");
+        textClean = textClean.replaceAll("lt\\w*", " ");
+        textClean = textClean.trim().replaceAll(" +", " ");
+        textClean = textClean.replaceAll("Reuter\\s\\d*|REUTER\\s\\d*", "");
+
+        return textClean;
+    }
+
+    /**
      * Parses the file for documents demarcated by <REUTERS></REUTERS> tags
      * @param text - raw file text
      */
@@ -155,7 +187,15 @@ public class FileParser {
         Matcher reutersMatcher = reuters.matcher(text);
 
         while (reutersMatcher.find()) {
-            this.documents.add(new Document(matchID(reutersMatcher.group(1)), matchTitle(reutersMatcher.group(1)), matchBody(reutersMatcher.group(1))));
+            String body = matchBody(reutersMatcher.group(1));
+            String title = matchTitle(reutersMatcher.group(1));
+
+            //  finds articles without bodies and titles
+            if (("").equalsIgnoreCase(body) && ("").equalsIgnoreCase(title)) {
+                body = matchText(reutersMatcher.group(1));
+            }
+
+            this.documents.add(new Document(matchID(reutersMatcher.group(1)), title, body));
         }
     }
 }
