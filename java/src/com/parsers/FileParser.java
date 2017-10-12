@@ -1,9 +1,9 @@
 package com.parsers;
 
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import com.entity.Document;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +31,7 @@ public class FileParser {
      * @param fileName - name of file to be parsed
      */
     public FileParser(String fileName) {
-        BasicConfigurator.configure();  //  configures log4j logger
+        PropertyConfigurator.configure("java/resources/lib/log4j.properties");
 
         this.file = new File(fileName);
         this.text = new StringBuilder();
