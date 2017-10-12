@@ -163,6 +163,12 @@ public class FileParser {
 
         String textClean = textBuilder.toString();
 
+        //  removes all non word characters
+        textClean = textClean.replaceAll("[^\\w*\\s]", " ");
+        textClean = textClean.replaceAll("lt\\w*", " ");
+        textClean = textClean.trim().replaceAll(" +", " ");
+        textClean = textClean.replaceAll("Reuter\\s\\d*|REUTER\\s\\d*", "");
+
         return textClean;
     }
 
@@ -176,12 +182,14 @@ public class FileParser {
 
         while (reutersMatcher.find()) {
             String body = matchBody(reutersMatcher.group(1));
-            if (("").equalsIgnoreCase(body)) {
+            String title = matchTitle(reutersMatcher.group(1));
+
+            //  finds articles without bodies and titles
+            if (("").equalsIgnoreCase(body) && ("").equalsIgnoreCase(title)) {
                 body = matchText(reutersMatcher.group(1));
-                System.out.println(body);
             }
 
-            this.documents.add(new Document(matchID(reutersMatcher.group(1)), matchTitle(reutersMatcher.group(1)), body));
+            this.documents.add(new Document(matchID(reutersMatcher.group(1)), title, body));
         }
     }
 }

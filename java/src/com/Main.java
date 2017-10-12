@@ -23,15 +23,15 @@ public class Main {
         Dictionary dictionary = new Dictionary();
         Set<Term> set = dictionary.index(documents);
 
-        for (Document d : documents) {
-            /*if (d.getAllTerms().isEmpty()) {
+       /* for (Document d : documents) {
+            if (d.getAllTerms().isEmpty()) {
                 System.out.print(d.getDocumentID() + " ");
-            }*/
+            }
             //System.out.println(d.getAllTerms());
-        }
+        }*/
 
         for (Term t : set) {
-           // logger.info(t);
+           logger.info(t);
         }
     }
 }
