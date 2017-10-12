@@ -110,6 +110,8 @@ public class FileParser {
 
         if (matcher.find()) {
             titleBuilder.append(matcher.group(1));
+        } else {
+            return "";
         }
 
         String titleClean = titleBuilder.toString();
@@ -134,6 +136,8 @@ public class FileParser {
 
         if (matcher.find()) {
             bodyBuilder.append(matcher.group(1));
+        } else {
+            return "";
         }
 
         String bodyClean = bodyBuilder.toString();
