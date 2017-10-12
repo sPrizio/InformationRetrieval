@@ -30,8 +30,8 @@ public class Main {
             //System.out.println(d.getAllTerms());
         }
 
-        /*for (Term t : set) {
-            logger.info(t);
-        }*/
+        for (Term t : set) {
+           // logger.info(t);
+        }
     }
 }

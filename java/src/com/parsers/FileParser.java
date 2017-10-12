@@ -150,6 +150,22 @@ public class FileParser {
         return bodyClean;
     }
 
+    private String matchText(String text) {
+        StringBuilder textBuilder = new StringBuilder();
+        Pattern txt = Pattern.compile("<TEXT[\\s\\S]*?>([\\s\\S]*?)<\\/TEXT>");
+        Matcher txtMatcher = txt.matcher(text);
+
+        if (txtMatcher.find()) {
+            textBuilder.append(txtMatcher.group(1));
+        } else {
+            return "";
+        }
+
+        String textClean = textBuilder.toString();
+
+        return textClean;
+    }
+
     /**
      * Parses the file for documents demarcated by <REUTERS></REUTERS> tags
      * @param text - raw file text
@@ -159,7 +175,13 @@ public class FileParser {
         Matcher reutersMatcher = reuters.matcher(text);
 
         while (reutersMatcher.find()) {
-            this.documents.add(new Document(matchID(reutersMatcher.group(1)), matchTitle(reutersMatcher.group(1)), matchBody(reutersMatcher.group(1))));
+            String body = matchBody(reutersMatcher.group(1));
+            if (("").equalsIgnoreCase(body)) {
+                body = matchText(reutersMatcher.group(1));
+                System.out.println(body);
+            }
+
+            this.documents.add(new Document(matchID(reutersMatcher.group(1)), matchTitle(reutersMatcher.group(1)), body));
         }
     }
 }
