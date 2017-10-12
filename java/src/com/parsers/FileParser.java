@@ -150,6 +150,12 @@ public class FileParser {
         return bodyClean;
     }
 
+    /**
+     * Reads raw document and extracts text content, typically used when there aren't any <BODY></BODY> and <TEXT></TEXT> tags
+     *
+     * @param text - raw document
+     * @return document text
+     */
     private String matchText(String text) {
         StringBuilder textBuilder = new StringBuilder();
         Pattern txt = Pattern.compile("<TEXT[\\s\\S]*?>([\\s\\S]*?)<\\/TEXT>");
