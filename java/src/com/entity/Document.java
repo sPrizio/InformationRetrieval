@@ -1,6 +1,6 @@
-package projectone.entity;
+package com.entity;
 
-import projectone.tokenizer.Tokenizer;
+import com.tokenizer.Tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;

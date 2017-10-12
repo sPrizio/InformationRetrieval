@@ -1,9 +1,9 @@
-package projectone.parsers;
+package com.parsers;
 
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import projectone.entity.Document;
+import com.entity.Document;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,4 +1,4 @@
-package projectone.tokenizer;
+package com.tokenizer;
 
 import org.tartarus.martin.Stemmer;
 

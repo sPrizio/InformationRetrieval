@@ -1,6 +1,6 @@
-package projectone.spimi;
+package com.spimi;
 
-import projectone.entity.Dictionary;
+import com.entity.Dictionary;
 
 import java.io.File;
 

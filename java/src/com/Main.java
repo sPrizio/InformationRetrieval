@@ -1,11 +1,11 @@
-package projectone;
+package com;
 
 
 import org.apache.log4j.BasicConfigurator;
-import projectone.entity.Dictionary;
-import projectone.entity.Document;
-import projectone.entity.Term;
-import projectone.parsers.FileParser;
+import com.entity.Dictionary;
+import com.entity.Document;
+import com.entity.Term;
+import com.parsers.FileParser;
 
 import java.util.*;
 import java.util.logging.Logger;
