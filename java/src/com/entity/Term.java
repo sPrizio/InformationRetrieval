@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author Stephen Prizio
  */
-public class Term {
+public class Term implements Comparable<Term> {
     private String value;
     private Set<Integer> postingsList;
 
@@ -76,5 +76,10 @@ public class Term {
     @Override
     public String toString() {
         return (this.value + " - " + this.postingsList);
+    }
+
+    @Override
+    public int compareTo(Term term) {
+        return this.value.compareToIgnoreCase(term.getValue());
     }
 }
