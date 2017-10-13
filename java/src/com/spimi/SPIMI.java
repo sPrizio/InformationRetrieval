@@ -18,11 +18,32 @@ import java.util.*;
 public class SPIMI {
     private static final Logger logger = Logger.getLogger(SPIMI.class.getName());
     private Dictionary dictionary;
+    private int fileCounter;
 
     /**
      * Default constructor that instantiates a new, empty inverted index
      */
-    public SPIMI() { this.dictionary = new Dictionary(); }
+    public SPIMI() {
+        this.dictionary = new Dictionary();
+        this.fileCounter = 0;
+    }
+
+
+    //  METHODS
+
+    //  comment
+    public void spimi(List<Term> terms, int memoryLimit) {
+        List<List<Term>> chunks = new ArrayList<>();
+
+        for (int i  = 0; i < terms.size(); i += memoryLimit) {
+            chunks.add(terms.subList(i, Math.min(i + memoryLimit, terms.size())));
+        }
+
+        for (List<Term> list : chunks) {
+            spimiInvert(list);
+        }
+    }
+
 
     /**
      * Java implementation of the SPIMI-Invert algorithm. The hash table implementation in Java already
@@ -35,7 +56,7 @@ public class SPIMI {
      * @return file containing an inverted index of the given terms
      */
     public File spimiInvert(List<Term> terms) {
-        File file = new File("java/resources/inverted-index.txt");
+        File file = new File("java/resources/results/inverted-index-" + this.fileCounter + ".txt");
         Dictionary fileDictionary = new Dictionary();
         int counter = 0;    //  artificial memory parameter
 
@@ -61,6 +82,7 @@ public class SPIMI {
             for (Term t : results) {
                 bufferedWriter.write(t + "\n");
             }
+            ++this.fileCounter;
         } catch (IOException e) {
             logger.error("Error, cannot write to disc.");
         }
