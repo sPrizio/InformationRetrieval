@@ -50,7 +50,7 @@ public class SPIMI {
             memoryChunks.add(spimiInvert(list));
         }
 
-        return mergeChunks(memoryChunks);
+        return spimiMerge(memoryChunks);
     }
 
 
@@ -99,7 +99,13 @@ public class SPIMI {
         return file;
     }
 
-    private File mergeChunks(List<File> files) {
+    /**
+     * Merges a list of files containing inverted indices into one file
+     *
+     * @param files - list of files containing inverted indices
+     * @return one file containing the master inverted index
+     */
+    private File spimiMerge(List<File> files) {
         File file = new File("java/resources/results/inverted-index.txt");
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -162,6 +168,12 @@ public class SPIMI {
         return sorted;
     }
 
+    /**
+     * Converts a comma separated string of integers to a set of integers
+     *
+     * @param setString - string of comma separated integers
+     * @return sorted set of integers
+     */
     private Set<Integer> convertToSet(String setString) {
         String convertee = setString.replaceAll("\\[|\\]", "");
 
