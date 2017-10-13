@@ -54,7 +54,7 @@ public class Term implements Comparable<Term> {
         this.postingsList.add(docId);
     }
 
-    private void addToPostingsList(Set<Integer> docIds) {
+    public void addToPostingsList(Set<Integer> docIds) {
         this.postingsList.addAll(docIds);
     }
 

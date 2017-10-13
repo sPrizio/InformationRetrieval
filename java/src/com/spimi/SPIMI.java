@@ -4,11 +4,10 @@ import com.entity.Dictionary;
 import com.entity.Term;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Collection of Single-pass in-memory indexing algorithms for use in an information retrieval system
@@ -31,17 +30,27 @@ public class SPIMI {
 
     //  METHODS
 
-    //  comment
-    public void spimi(List<Term> terms, int memoryLimit) {
+    /**
+     * Implementation of the SPIMI algorithm, taking in a list of terms to be indexed and a memory limit (here stimulated by a limit of terms for one chunk)
+     *
+     * @param terms       - terms to be indexed
+     * @param memoryLimit - maximum number of terms for one chunk to stimulate a memory limitation
+     */
+    public File spimi(List<Term> terms, int memoryLimit) {
         List<List<Term>> chunks = new ArrayList<>();
+        List<File> memoryChunks = new ArrayList<>();
 
-        for (int i  = 0; i < terms.size(); i += memoryLimit) {
+        //  partition token list into lists of equal size, stimulates small memory capacity
+        for (int i = 0; i < terms.size(); i += memoryLimit) {
             chunks.add(terms.subList(i, Math.min(i + memoryLimit, terms.size())));
         }
 
+        //  for each "memory chunk", create an inverted index and write it to disk
         for (List<Term> list : chunks) {
-            spimiInvert(list);
+            memoryChunks.add(spimiInvert(list));
         }
+
+        return mergeChunks(memoryChunks);
     }
 
 
@@ -55,7 +64,7 @@ public class SPIMI {
      * @param terms - term stream of terms to be added to the dictionary
      * @return file containing an inverted index of the given terms
      */
-    public File spimiInvert(List<Term> terms) {
+    private File spimiInvert(List<Term> terms) {
         File file = new File("java/resources/results/inverted-index-" + this.fileCounter + ".txt");
         Dictionary fileDictionary = new Dictionary();
         int counter = 0;    //  artificial memory parameter
@@ -90,6 +99,56 @@ public class SPIMI {
         return file;
     }
 
+    private File mergeChunks(List<File> files) {
+        File file = new File("java/resources/results/inverted-index.txt");
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (File f : files) {
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(f))) {
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                    stringBuilder.append("\n");
+                }
+            } catch (IOException e) {
+                logger.error("File could not be found.");
+            }
+
+            Pattern pattern = Pattern.compile("(.*) - (\\[.*\\])");
+            Matcher matcher = pattern.matcher(stringBuilder.toString());
+
+            while (matcher.find()) {
+                Term term = new Term(matcher.group(1));
+                term.addToPostingsList(convertToSet(matcher.group(2)));
+
+                this.dictionary.addToDictionary(term);
+            }
+
+            f.delete();
+        }
+
+        //  get dictionary
+        Set<Term> terms = this.dictionary.getKeySet();
+
+        //  sort terms
+        terms = sortTerms(terms);
+
+        //  write dictionary to file
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
+            for (Term t : terms) {
+                bufferedWriter.write(t + "\n");
+            }
+        } catch (IOException e) {
+            logger.error("Error, cannot write to disc.");
+        }
+
+        return file;
+    }
+
+
+    //  HELPERS
+
     /**
      * Sorts all terms in a set
      *
@@ -101,5 +160,19 @@ public class SPIMI {
         sorted.addAll(terms);
 
         return sorted;
+    }
+
+    private Set<Integer> convertToSet(String setString) {
+        String convertee = setString.replaceAll("\\[|\\]", "");
+
+        Set<Integer> integers = new TreeSet<>();
+
+        List<String> list = Arrays.asList(convertee.split(","));
+
+        for (String s : list) {
+            integers.add(Integer.parseInt(s.trim()));
+        }
+
+        return integers;
     }
 }

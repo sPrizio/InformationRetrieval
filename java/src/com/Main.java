@@ -29,7 +29,7 @@ public class Main {
         //  will have to create a method that calls spimiInvert repeatedly while memory limitation is not surpassed
         SPIMI spimi = new SPIMI();
         //spimi.spimiInvert(docTerms);
-        spimi.spimi(docTerms, 1000);
+        spimi.spimi(docTerms, 500);
 
     }
 }
