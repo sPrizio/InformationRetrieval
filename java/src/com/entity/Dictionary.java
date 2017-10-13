@@ -1,8 +1,6 @@
 package com.entity;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,30 +26,18 @@ public class Dictionary {
         return this.terms;
     }
 
+    public Set<Term> getKeySet() {
+        return this.termDictionary.keySet();
+    }
 
     //  METHODS
 
     /**
-     * Builds an inverted index of terms containing correctly updates postings lists
+     * Adds a term to this dictionary
      *
-     * @param documents - collection of documents to be indexed
-     * @return inverted index of terms with postings lists reflecting containing documents
+     * @param term - term to be added
      */
-    public Set<Term> index(List<Document> documents) {
-        List<Term> docTerms = new ArrayList<>();
-
-        for (Document document : documents) {
-            docTerms.addAll(document.getAllTerms());
-        }
-
-        for (Term t : docTerms) {
-            this.termDictionary.put(t, t.getPostingsList());
-        }
-
-        docTerms.clear();
-
-        this.terms = this.termDictionary.keySet();
-
-        return this.terms;
+    public void addToDictionary(Term term) {
+        this.termDictionary.put(term, term.getPostingsList());
     }
 }
