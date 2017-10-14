@@ -18,6 +18,7 @@ public class SPIMI {
     private static final Logger logger = Logger.getLogger(SPIMI.class.getName());
     private Dictionary dictionary;
     private int fileCounter;
+    private Dictionary invertedIndex;
 
     /**
      * Default constructor that instantiates a new, empty inverted index
@@ -25,6 +26,7 @@ public class SPIMI {
     public SPIMI() {
         this.dictionary = new Dictionary();
         this.fileCounter = 0;
+        this.invertedIndex = new Dictionary();
     }
 
 
@@ -90,11 +92,15 @@ public class SPIMI {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Term t : results) {
                 bufferedWriter.write(t + "\n");
+                this.invertedIndex.addToDictionary(t);
             }
             ++this.fileCounter;
         } catch (IOException e) {
             logger.error("Error, cannot write to disc.");
         }
+
+        //  clears extra dictionary
+        this.dictionary.clear();
 
         return file;
     }

@@ -40,4 +40,15 @@ public class Dictionary {
     public void addToDictionary(Term term) {
         this.termDictionary.put(term, term.getPostingsList());
     }
+
+    /**
+     * Clears this dictionary of entries
+     */
+    public void clear() {
+        this.termDictionary.clear();
+    }
+
+    public Set<Integer> getPostingList(Term key) {
+        return this.termDictionary.get(key);
+    }
 }
