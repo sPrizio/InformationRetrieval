@@ -1,3 +1,4 @@
 .idea/
 out/
-java/resources/results/
+java/resources/results/*
+java/resources/statistics/*

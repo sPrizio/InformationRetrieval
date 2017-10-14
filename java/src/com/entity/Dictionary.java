@@ -51,4 +51,5 @@ public class Dictionary {
     public Set<Integer> getPostingList(Term key) {
         return this.termDictionary.get(key);
     }
+
 }
