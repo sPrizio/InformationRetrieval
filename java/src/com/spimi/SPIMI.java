@@ -18,6 +18,7 @@ public class SPIMI {
     private static final Logger logger = Logger.getLogger(SPIMI.class.getName());
     private Dictionary dictionary;
     private int fileCounter;
+    private Dictionary invertedIndex;
 
     /**
      * Default constructor that instantiates a new, empty inverted index
@@ -25,6 +26,8 @@ public class SPIMI {
     public SPIMI() {
         this.dictionary = new Dictionary();
         this.fileCounter = 0;
+        this.invertedIndex = new Dictionary();
+        clearData();    //  clears previous files
     }
 
 
@@ -90,11 +93,15 @@ public class SPIMI {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Term t : results) {
                 bufferedWriter.write(t + "\n");
+                this.invertedIndex.addToDictionary(t);
             }
             ++this.fileCounter;
         } catch (IOException e) {
             logger.error("Error, cannot write to disc.");
         }
+
+        //  clears extra dictionary
+        this.dictionary.clear();
 
         return file;
     }
@@ -106,7 +113,7 @@ public class SPIMI {
      * @return one file containing the master inverted index
      */
     private File spimiMerge(List<File> files) {
-        File file = new File("java/resources/results/inverted-index.txt");
+        File file = new File("java/resources/inverted-index.txt");
         StringBuilder stringBuilder = new StringBuilder();
 
         for (File f : files) {
@@ -130,8 +137,6 @@ public class SPIMI {
 
                 this.dictionary.addToDictionary(term);
             }
-
-            f.delete();
         }
 
         //  get dictionary
@@ -186,5 +191,26 @@ public class SPIMI {
         }
 
         return integers;
+    }
+
+    /**
+     * Clears all previously created dictionaries and inverted indices
+     */
+    public void clearData() {
+        File directory = new File("java/resources/results");
+        File[] files = directory.listFiles();
+
+
+        if (files != null) {
+            for (int i = 0; i < files.length; ++i) {
+                files[i].delete();
+            }
+        }
+
+        File iv = new File("java/resources/inverted-index.txt");
+
+        if (iv.exists()) {
+            iv.delete();
+        }
     }
 }
