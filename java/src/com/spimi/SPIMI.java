@@ -27,6 +27,7 @@ public class SPIMI {
         this.dictionary = new Dictionary();
         this.fileCounter = 0;
         this.invertedIndex = new Dictionary();
+        clearData();    //  clears previous files
     }
 
 
@@ -112,7 +113,7 @@ public class SPIMI {
      * @return one file containing the master inverted index
      */
     private File spimiMerge(List<File> files) {
-        File file = new File("java/resources/results/inverted-index.txt");
+        File file = new File("java/resources/inverted-index.txt");
         StringBuilder stringBuilder = new StringBuilder();
 
         for (File f : files) {
@@ -136,8 +137,6 @@ public class SPIMI {
 
                 this.dictionary.addToDictionary(term);
             }
-
-            f.delete();
         }
 
         //  get dictionary
@@ -192,5 +191,26 @@ public class SPIMI {
         }
 
         return integers;
+    }
+
+    /**
+     * Clears all previously created dictionaries and inverted indices
+     */
+    public void clearData() {
+        File directory = new File("java/resources/results");
+        File[] files = directory.listFiles();
+
+
+        if (files != null) {
+            for (int i = 0; i < files.length; ++i) {
+                files[i].delete();
+            }
+        }
+
+        File iv = new File("java/resources/inverted-index.txt");
+
+        if (iv.exists()) {
+            iv.delete();
+        }
     }
 }

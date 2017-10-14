@@ -27,7 +27,7 @@ public class Main {
         }
 
         SPIMI spimi = new SPIMI();
-        spimi.spimi(docTerms, 500000);
-
+        spimi.spimi(docTerms, 1500000);  //  500,000 is a decent starting point for slowest simulations, collections hover around 5,700,000 terms
+        spimi.clearData();  //  clears data created by spimi
     }
 }
