@@ -2,6 +2,7 @@ package com.entity;
 
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A dictionary object holding terms and their postings lists
@@ -30,6 +31,15 @@ public class Dictionary {
         return this.termDictionary.keySet();
     }
 
+    public Set<Integer> getUniversalSet() {
+        Set<Integer> set = new TreeSet<>();
+
+        for (int i = 1; i <= 21578; ++i) {
+            set.add(i);
+        }
+
+        return set;
+    }
     //  METHODS
 
     /**
