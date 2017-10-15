@@ -2,10 +2,10 @@ package com.query;
 
 import com.entity.Dictionary;
 import com.entity.Term;
-import com.tokenizer.Tokenizer;
 import org.apache.log4j.Logger;
 import org.tartarus.martin.Stemmer;
 
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -36,7 +36,7 @@ public class QueryHandler {
      * Runs the query handler and accepts user input
      */
     public void run() {
-        logger.info("Welcome to Speemer! Type in a boolean query with words separated by AND, OR and NOT to find some cool information! Type quit to exit");
+        logger.info("Welcome to Speemer! Type in a boolean query with 2 words separated by AND, OR and NOT to find some cool information! Type quit to exit");
         String[] inputParameters;
 
         do {
@@ -49,7 +49,7 @@ public class QueryHandler {
     }
 
     /**
-     * Handles queries and finds and displays appropriate searches
+     * Handles queries and finds and displays appropriate matching postings
      *
      * @param params - each part of the query
      */
@@ -57,6 +57,9 @@ public class QueryHandler {
         if (params.length == 1) {
             Term term = new Term(filter(params[0]));
             printResults(this.invertedIndex.getPostingList(term));
+        } else {
+            String[] cleaned = cleanInput(params);
+            printResults(queryMatch(cleaned));
         }
     }
 
@@ -97,5 +100,55 @@ public class QueryHandler {
         returnString = returnString.replaceAll("\\d*", "");
 
         return returnString;
+    }
+
+    /**
+     * Cleans input from user to match terms in index
+     *
+     * @param strings - user query
+     * @return - cleaned user query
+     */
+    private String[] cleanInput(String[] strings) {
+        String[] temp = new String[strings.length];
+
+        for (int i = 0; i < strings.length; ++i) {
+            if (!(strings[i].equals("AND") || strings[i].equals("OR") || strings[i].equals("NOT"))) {
+                temp[i] = filter(strings[i]);
+            } else {
+                temp[i] = strings[i];
+            }
+        }
+
+        return temp;
+    }
+
+    private Set<Integer> queryMatch(String[] params) {
+        if (params[0].equals("AND") || params[0].equals("OR") || params[0].equals("NOT") || params.length > 4) {
+            return null;
+        }
+
+        if (params[1].equals("AND")) {
+            Term term1 = new Term(params[0]);
+            Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
+
+            Term term2 = new Term(params[2]);
+            Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
+
+            set1.retainAll(set2);
+
+            return set1;
+        } else if (params[1].equals("OR")) {
+            Term term1 = new Term(params[0]);
+            Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
+
+            Term term2 = new Term(params[2]);
+            Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
+
+            set1.addAll(set2);
+
+            return set1;
+        }
+
+        return null;
     }
 }
