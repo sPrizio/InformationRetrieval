@@ -60,6 +60,7 @@ public class Document {
         merged = tokenizer.removeCaps(merged);
         merged = tokenizer.removePunctuation(merged);
         merged = tokenizer.stem(merged);
+        merged = tokenizer.removeNumbers(merged);
 
         for (String s : merged) {
             Term term = new Term(s);

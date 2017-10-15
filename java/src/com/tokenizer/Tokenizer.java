@@ -12,6 +12,15 @@ import java.util.*;
 public class Tokenizer {
     private ArrayList<String> tokens;
     private Stemmer stemmer;
+    private static final String[] THIRY_STOP_WORDS = { "a", "and", "as", "at", "be", "but", "by", "do", "for", "from", "have", "his", "in", "it", "not", "of", "on", "or", "say", "she", "that", "that", "the",
+            "they", "this", "to", "to", "we", "with", "you" };
+    private static final String[] ONE_FIFTY_STOP_WORDS = { "I", "a", "about", "after", "all", "also", "and", "another", "any", "as", "as", "as", "ask", "at", "back", "be", "because", "become", "between", "but",
+            "by", "call", "can", "child", "come", "could", "day", "do", "down", "even", "family", "feel", "find", "first", "for", "from", "get", "give", "go", "good", "have", "he", "her", "her", "here", "high",
+            "him", "his", "how", "if", "in", "in", "into", "it", "its", "just", "know", "last", "leave", "life", "like", "look", "make", "man", "many", "may", "me", "more", "more", "most", "much", "my", "n't",
+            "need", "never", "new", "no", "not", "now", "of", "on", "one", "one", "only", "or", "other", "our", "out", "out", "over", "own", "people", "really", "say", "school", "see", "she", "should", "so",
+            "some", "something", "state", "still", "take", "tell", "than", "that", "that", "the", "their", "them", "then", "there", "there", "these", "they", "thing", "think", "this", "those", "three",
+            "through", "time", "to", "to", "too", "try", "two", "up", "us", "use", "very", "want", "way", "we", "well", "what", "when", "when", "which", "who", "will", "with", "woman", "work", "world", "would",
+            "year", "you", "your" };
 
     public Tokenizer() {
         tokens = new ArrayList<>();
@@ -80,6 +89,72 @@ public class Tokenizer {
             this.stemmer.add(s.toCharArray(), s.length());
             this.stemmer.stem();
             temp.add(this.stemmer.toString());
+        }
+
+        return temp;
+    }
+
+    /**
+     * Removes the 30 most common stop words
+     *
+     * @param tokens - list of tokens extracted from document
+     * @return list of tokens without 30 most common stop words
+     */
+    public List<String> remove30StopWords(List<String> tokens) {
+        List<String> temp = new ArrayList<>();
+
+        for (int i = 0; i < tokens.size(); ++i) {
+            Boolean found = false;
+            for (int j = 0; j < THIRY_STOP_WORDS.length; ++j) {
+                if (tokens.get(i).equalsIgnoreCase(THIRY_STOP_WORDS[j])) {
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                temp.add(tokens.get(i));
+            }
+        }
+
+        return temp;
+    }
+
+    /**
+     * Removes the 150 most common stop words
+     *
+     * @param tokens - list of tokens extracted from document
+     * @return list of tokens without 150 most common stop words
+     */
+    public List<String> remove150StopWords(List<String> tokens) {
+        List<String> temp = new ArrayList<>();
+
+        for (int i = 0; i < tokens.size(); ++i) {
+            Boolean found = false;
+            for (int j = 0; j < ONE_FIFTY_STOP_WORDS.length; ++j) {
+                if (tokens.get(i).equalsIgnoreCase(ONE_FIFTY_STOP_WORDS[j])) {
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                temp.add(tokens.get(i));
+            }
+        }
+
+        return temp;
+    }
+
+    /**
+     * Removes all numbers
+     *
+     * @param tokens - list of tokens extracted from document
+     * @return tokens without numbers
+     */
+    public List<String> removeNumbers(List<String> tokens) {
+        List<String> temp = new ArrayList<>();
+
+        for (String s : tokens) {
+            temp.add(s.trim().replaceAll("\\d*", ""));
         }
 
         return temp;

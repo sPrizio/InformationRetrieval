@@ -30,27 +30,49 @@ public class SPIMI {
         clearData();    //  clears previous files
     }
 
+    /**
+     * Gets size of this inverted index
+     *
+     * @return size of inverted index
+     */
+    public int getSize() {
+        return this.invertedIndex.getKeySet().size();
+    }
+
+    /**
+     * Returns inverted index
+     *
+     * @return this collection's inverted index
+     */
+    public Dictionary getInvertedIndex() {
+        return this.invertedIndex;
+    }
 
     //  METHODS
 
     /**
      * Implementation of the SPIMI algorithm, taking in a list of terms to be indexed and a memory limit (here stimulated by a limit of terms for one chunk)
      *
-     * @param terms       - terms to be indexed
-     * @param memoryLimit - maximum number of terms for one chunk to stimulate a memory limitation
+     * @param terms - terms to be indexed
+     * @param memoryLimit - maximum number of terms for one chunk to stimulate a memory limitation, 0 means unlimited
      */
     public File spimi(List<Term> terms, int memoryLimit) {
         List<List<Term>> chunks = new ArrayList<>();
         List<File> memoryChunks = new ArrayList<>();
 
-        //  partition token list into lists of equal size, stimulates small memory capacity
-        for (int i = 0; i < terms.size(); i += memoryLimit) {
-            chunks.add(terms.subList(i, Math.min(i + memoryLimit, terms.size())));
-        }
+        if (memoryLimit == 0) {
+            memoryChunks.add(spimiInvert(terms));
+        } else {
 
-        //  for each "memory chunk", create an inverted index and write it to disk
-        for (List<Term> list : chunks) {
-            memoryChunks.add(spimiInvert(list));
+            //  partition token list into lists of equal size, stimulates small memory capacity
+            for (int i = 0; i < terms.size(); i += memoryLimit) {
+                chunks.add(terms.subList(i, Math.min(i + memoryLimit, terms.size())));
+            }
+
+            //  for each "memory chunk", create an inverted index and write it to disk
+            for (List<Term> list : chunks) {
+                memoryChunks.add(spimiInvert(list));
+            }
         }
 
         return spimiMerge(memoryChunks);

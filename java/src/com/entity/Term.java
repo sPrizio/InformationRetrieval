@@ -65,7 +65,7 @@ public class Term implements Comparable<Term> {
 
    @Override
     public boolean equals(Object t) {
-        if (t instanceof Term && this.value.equalsIgnoreCase(((Term) t).value)) {
+        if (t instanceof Term && this.value.equals(((Term) t).value)) {
             this.addToPostingsList(((Term) t).getPostingsList());
             return true;
         }
