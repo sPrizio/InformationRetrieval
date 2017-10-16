@@ -135,6 +135,8 @@ public class SPIMI {
      * @return one file containing the master inverted index
      */
     private File spimiMerge(List<File> files) {
+        List<Term> termsTest = new ArrayList<>();
+        List<String> strings = new ArrayList<>();
         File file = new File("java/resources/inverted-index.txt");
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -155,9 +157,13 @@ public class SPIMI {
 
             while (matcher.find()) {
                 Term term = new Term(matcher.group(1));
-                term.addToPostingsList(convertToSet(matcher.group(2)));
+                termsTest.add(term);
+                strings.add(matcher.group(2));
+            }
 
-                this.dictionary.addToDictionary(term);
+            for (int i = 0; i < termsTest.size(); ++i) {
+                termsTest.get(i).addToPostingsList(convertToSet(strings.get(i)));
+                this.dictionary.addToDictionary(termsTest.get(i));
             }
         }
 
@@ -202,11 +208,10 @@ public class SPIMI {
      * @return sorted set of integers
      */
     private Set<Integer> convertToSet(String setString) {
-        String convertee = setString.replaceAll("\\[|\\]", "");
 
         Set<Integer> integers = new TreeSet<>();
 
-        List<String> list = Arrays.asList(convertee.split(","));
+        List<String> list = Arrays.asList(setString.replaceAll("\\[|\\]", "").split(","));
 
         for (String s : list) {
             integers.add(Integer.parseInt(s.trim()));

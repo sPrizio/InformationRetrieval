@@ -75,7 +75,7 @@ public class QueryHandler {
                 logger.info("No results were found for your query. Please try something else.");
             } else {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("The following documents matched the query: ");
+                stringBuilder.append("The following documents matched the query '" + this.input + "': ");
                 stringBuilder.append(set);
 
                 logger.info(stringBuilder);
