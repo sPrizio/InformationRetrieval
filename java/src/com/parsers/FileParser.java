@@ -15,9 +15,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Parses an sgm file to obtain key information
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class FileParser {
     private Logger logger = Logger.getLogger(FileParser.class);

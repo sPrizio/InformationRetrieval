@@ -11,9 +11,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Handles queries passed by the user
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class QueryHandler {
     private Dictionary invertedIndex;

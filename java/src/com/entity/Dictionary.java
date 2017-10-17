@@ -5,9 +5,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * A dictionary object holding terms and their postings lists
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class Dictionary {
     private Hashtable<Term, Set<Integer>> termDictionary;

@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Representation of a document that is to be indexed
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class Document {
     private int documentID;

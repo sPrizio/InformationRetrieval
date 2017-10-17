@@ -10,9 +10,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Collection of Single-pass in-memory indexing algorithms for use in an information retrieval system
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class SPIMI {
     private static final Logger logger = Logger.getLogger(SPIMI.class.getName());
