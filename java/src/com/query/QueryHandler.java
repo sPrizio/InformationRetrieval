@@ -278,6 +278,10 @@ public class QueryHandler {
     private Set<Integer> intersection(Set<Integer> set1, Set<Integer> set2) {
         Set<Integer> results = new TreeSet<>();
 
+        if (set1 == null || set2 == null) {
+            return results;
+        }
+
         for (Integer i : set1) {
             if (set2.contains(i)) {
                 results.add(i);
@@ -297,8 +301,12 @@ public class QueryHandler {
     private Set<Integer> union(Set<Integer> set1, Set<Integer> set2) {
         Set<Integer> results = new TreeSet<>();
 
-        results.addAll(set1);
-        results.addAll(set2);
+        if (set1 != null) {
+            results.addAll(set1);
+        }
+        if (set2 != null) {
+            results.addAll(set2);
+        }
 
         return results;
     }
