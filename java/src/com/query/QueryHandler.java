@@ -5,10 +5,7 @@ import com.entity.Term;
 import org.apache.log4j.Logger;
 import org.tartarus.martin.Stemmer;
 
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Handles queries passed by the user
@@ -60,7 +57,12 @@ public class QueryHandler {
             printResults(this.invertedIndex.getPostingList(term));
         } else {
             String[] cleaned = cleanInput(params);
-            printResults(queryMatch(cleaned));
+
+            if (containsBooleanOperator(cleaned)) {
+                printResults(queryMatch(cleaned));
+            } else {
+                printResults(queryMatchNoOperators(cleaned));
+            }
         }
     }
 
@@ -236,6 +238,24 @@ public class QueryHandler {
     }
 
     /**
+     * Matches terms without the need for boolean operators (assumes AND)
+     *
+     * @param params - user query
+     * @return intersection list of query
+     */
+    private Set<Integer> queryMatchNoOperators(String[] params) {
+        //TODO: test on dictioanry at home
+        List<Set<Integer>> postings = new ArrayList<>();
+
+        for (String s : params) {
+            Term t = new Term(s);
+            postings.add(this.invertedIndex.getPostingList(t));
+        }
+
+        return match(postings);
+    }
+
+    /**
      * Checks to see if the query contains a NOT operator
      *
      * @param params - user query
@@ -302,4 +322,41 @@ public class QueryHandler {
 
         return results;
     }
+
+    /**
+     * Checks if params contain boolean operators
+     *
+     * @param params - query terms
+     * @return false if no AND or OR were found
+     */
+    private boolean containsBooleanOperator(String[] params) {
+        for (String s : params) {
+            if (s.equals("AND") || s.equals("OR")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds the intersection of multiple sets
+     *
+     * @param list - list of postings lists
+     * @return list of common elements
+     */
+    private Set<Integer> match(List<Set<Integer>> list) {
+        List<Set<Integer>> s = new ArrayList<>();
+
+        for (int i = 0; i < list.size() - 1; ++i) {
+            s.add(intersection(list.get(i), list.get(i + 1)));
+        }
+
+        if (s.size() == 1) {
+            return s.get(0);
+        }
+
+        return match(s);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com;
 
 
+import com.entity.Dictionary;
 import com.entity.Document;
 import com.entity.Term;
 import com.parsers.TotalParser;
@@ -18,7 +19,7 @@ public class Main {
         //  configures logging pattern to show only the log message
         PropertyConfigurator.configure("java/resources/lib/log4j.properties");
 
-        logger.info("Parsing files for documents...");
+        /*logger.info("Parsing files for documents...");
 
         //  gets all documents for indexing
         TotalParser totalParser = new TotalParser();
@@ -40,10 +41,11 @@ public class Main {
         spimi.spimi(docTerms, 0);  //  500,000 is a decent starting point for slowest simulations, collections hover around 5,700,000 tokens
         //spimi.clearData();  //  clears data created by spimi
 
-        logger.info("Inverted index construction complete!");
+        logger.info("Inverted index construction complete!");*/
 
         //  runs the query handler to fetch documents requested by the user
-        QueryHandler queryHandler = new QueryHandler(spimi.getInvertedIndex());
+        //QueryHandler queryHandler = new QueryHandler(spimi.getInvertedIndex());
+        QueryHandler queryHandler = new QueryHandler(new Dictionary());
         queryHandler.run();     //  accept new queries
     }
 }
