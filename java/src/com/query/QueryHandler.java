@@ -59,16 +59,13 @@ public class QueryHandler {
      */
     private void control(String[] params) {
         if (params.length == 1) {
-            Term term = new Term(filter(params[0]));
-            printResults(this.invertedIndex.getPostingList(term));  //  TODO: CONVERT THIS TO OKAPI RANKING ALSO
+            String[] cleaned = cleanInput(params);
+
+            printResults(queryMatchNoOperators(cleaned));
         } else {
             String[] cleaned = cleanInput(params);
 
-            if (containsBooleanOperator(cleaned)) {
-                printResults(queryMatch(cleaned));
-            } else {
-                printResults(queryMatchNoOperators(cleaned));
-            }
+            printResults(queryMatchNoOperators(cleaned));
         }
     }
 
@@ -132,118 +129,6 @@ public class QueryHandler {
     }
 
     /**
-     * Matches postings list from query terms
-     *
-     * @param params - user query
-     * @return - intersection list of query
-     */
-    private Set<Integer> queryMatch(String[] params) {
-        if (params[0].equals("AND") || params[0].equals("OR")) {
-            return null;
-        }
-
-        if (!containsNot(params) && params.length == 3) {
-            if (params[1].equals("AND")) {
-                Term term1 = new Term(params[0]);
-                Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                Term term2 = new Term(params[2]);
-                Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                return intersection(set1, set2);
-            } else if (params[1].equals("OR")) {
-                Term term1 = new Term(params[0]);
-                Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                Term term2 = new Term(params[2]);
-                Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                return union(set1, set2);
-            }
-        } else if (containsNot(params)) {
-            int indexAnd = indexOfOperator(params, "AND");
-            int indexOr = indexOfOperator(params, "OR");
-
-            if (indexOr == -1 && indexAnd != -1) {
-                if (indexAnd == 1) {
-                    Term term1 = new Term((params[0]));
-                    Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                    Term term2 = new Term(params[3]);
-                    Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                    return intersection(set1, set2);
-                } else if (indexAnd == 2 && params.length == 4) {
-                    Term term1 = new Term((params[1]));
-                    Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                    Term term2 = new Term(params[3]);
-                    Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                    return intersection(set1, set2);
-                } else if (indexAnd == 2 && params.length == 5) {
-                    Term term1 = new Term((params[1]));
-                    Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                    Term term2 = new Term(params[3]);
-                    Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                    Set<Integer> universal = this.invertedIndex.getUniversalSet();
-
-                    universal.removeAll(set1);
-                    universal.removeAll(set2);
-
-                    return universal;
-                }
-            } else if (indexAnd == -1 && indexOr != -1) {
-                if (indexOr == 1) {
-                    Term term1 = new Term((params[0]));
-                    Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                    Term term2 = new Term(params[3]);
-                    Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                    return union(set1, set2);
-                } else if (indexOr == 2 && params.length == 4) {
-                    Term term1 = new Term((params[1]));
-                    Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                    Term term2 = new Term(params[3]);
-                    Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                    return union(set1, set2);
-                } else if (indexOr == 2 && params.length == 5) {
-                    Term term1 = new Term((params[1]));
-                    Set<Integer> set1 = this.invertedIndex.getPostingList(term1);
-
-                    Term term2 = new Term(params[3]);
-                    Set<Integer> set2 = this.invertedIndex.getPostingList(term2);
-
-                    Set<Integer> universal = this.invertedIndex.getUniversalSet();
-
-                    universal.removeAll(set1);
-                    universal.removeAll(set2);
-
-                    return universal;
-                }
-            } else if (params.length == 2) {
-                Term term = new Term(params[1]);
-                Set<Integer> set = this.invertedIndex.getPostingList(term);
-
-                Set<Integer> universal = this.invertedIndex.getUniversalSet();
-
-                universal.removeAll(set);
-
-                return universal;
-            }
-        } else {
-            return null;
-        }
-
-        return new HashSet<>();
-    }
-
-    /**
      * Matches terms without the need for boolean operators (assumes AND)
      *
      * @param params - user query
@@ -263,39 +148,6 @@ public class QueryHandler {
     }
 
     /**
-     * Checks to see if the query contains a NOT operator
-     *
-     * @param params - user query
-     * @return true if contains NOT, false otherwise
-     */
-    private boolean containsNot(String[] params) {
-        for (String s : params) {
-            if (s.equals("NOT")) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns index of the boolean operator in a query containing a NOT operator
-     *
-     * @param params - user query
-     * @param key    - AND or OR operator
-     * @return index of operator, -1 if not found
-     */
-    private int indexOfOperator(String[] params, String key) {
-        for (int i = 0; i < params.length; ++i) {
-            if (key.equals(params[i])) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    /**
      * Finds the common elements between 2 sets
      *
      * @param set1 - first set
@@ -312,38 +164,6 @@ public class QueryHandler {
         }
 
         return results;
-    }
-
-    /**
-     * Concatenates 2 sets
-     *
-     * @param set1 - first set
-     * @param set2 - second set
-     * @return new set containing both set
-     */
-    private Set<Integer> union(Set<Integer> set1, Set<Integer> set2) {
-        Set<Integer> results = new TreeSet<>();
-
-        results.addAll(set1);
-        results.addAll(set2);
-
-        return results;
-    }
-
-    /**
-     * Checks if params contain boolean operators
-     *
-     * @param params - query terms
-     * @return false if no AND or OR were found
-     */
-    private boolean containsBooleanOperator(String[] params) {
-        for (String s : params) {
-            if (s.equals("AND") || s.equals("OR")) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

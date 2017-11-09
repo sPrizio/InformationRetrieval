@@ -34,7 +34,7 @@ public class Main {
             docTerms.addAll(document.getAllTerms());
         }
 
-        logger.info("Recovering CPU processing time...");
+        logger.info("Allocating additional computing resources...");
         TimeUnit.SECONDS.sleep(8);  //  gives CPU a short break to recover
 
         logger.info("Building inverted index...");
