@@ -12,6 +12,13 @@ import org.apache.log4j.PropertyConfigurator;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
+ * Driver of the application that builds the inverted index and accepts queries
+ *
+ * @author Stephen Prizio - 40001739
+ */
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 
@@ -19,11 +26,13 @@ public class Main {
         //  configures logging pattern to show only the log message
         PropertyConfigurator.configure("java/resources/lib/log4j.properties");
 
-        logger.info("Parsing files for documents...");
+        logger.info("Parsing collection for documents...");
 
         //  gets all documents for indexing
         TotalParser totalParser = new TotalParser();
         List<Document> documents = totalParser.getDocuments();
+
+        logger.info("Documents collected.");
 
         List<Term> docTerms = new ArrayList<>();
 
@@ -35,6 +44,7 @@ public class Main {
         }
 
         logger.info("Allocating additional computing resources...");
+      
         TimeUnit.SECONDS.sleep(8);  //  gives CPU a short break to recover
 
         logger.info("Building inverted index...");

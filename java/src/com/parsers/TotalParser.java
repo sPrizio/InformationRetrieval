@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Responsible for parsing every available sgm file and returning the entire collection of available documents
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class TotalParser {
     private StringBuilder text;

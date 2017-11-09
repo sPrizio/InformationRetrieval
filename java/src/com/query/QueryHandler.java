@@ -10,9 +10,11 @@ import org.tartarus.martin.Stemmer;
 import java.util.*;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Handles queries passed by the user
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class QueryHandler {
     private Dictionary invertedIndex;
@@ -156,6 +158,10 @@ public class QueryHandler {
      */
     private Set<Integer> intersection(Set<Integer> set1, Set<Integer> set2) {
         Set<Integer> results = new TreeSet<>();
+
+        if (set1 == null || set2 == null) {
+            return results;
+        }
 
         for (Integer i : set1) {
             if (set2.contains(i)) {

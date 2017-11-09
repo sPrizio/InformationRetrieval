@@ -5,9 +5,11 @@ import org.tartarus.martin.Stemmer;
 import java.util.*;
 
 /**
+ * I certify that this submission is my original work and meets the Faculty’s Expectations of Originality - 16 October 2017
+ *
  * Responsible for term tokenization and normalization
  *
- * @author Stephen Prizio
+ * @author Stephen Prizio - 40001739
  */
 public class Tokenizer {
     private ArrayList<String> tokens;
