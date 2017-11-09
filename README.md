@@ -1,2 +1,12 @@
 # Information Retrieval
-A collection of Information Retrieval algorithms using Python's nltk packages for natural language processing and Java
+A basic search engine implementation using Single-Pass-In-Memory indexing.
+
+Feel free to review and consult this code for your own projects. If you enjoyed this project, give me a shout!
+
+Cheers :)
+
+### Authors
+* Stephen Prizio @sPrizio
+
+##### Copyright Stephen Prizio 2017
+##### This software is licensed under the GNU General Public License 3.0.

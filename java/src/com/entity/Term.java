@@ -65,7 +65,7 @@ public class Term implements Comparable<Term> {
         return this.value.hashCode();
     }
 
-   @Override
+    @Override
     public boolean equals(Object t) {
         if (t instanceof Term && this.value.equals(((Term) t).value)) {
             this.addToPostingsList(((Term) t).getPostingsList());
@@ -83,5 +83,9 @@ public class Term implements Comparable<Term> {
     @Override
     public int compareTo(Term term) {
         return this.value.compareToIgnoreCase(term.getValue());
+    }
+
+    public int getDocumentFrequency() {
+        return this.postingsList.size();
     }
 }
