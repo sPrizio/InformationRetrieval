@@ -43,10 +43,12 @@ public class Main {
             docTerms.addAll(document.getAllTerms());
         }
 
+        logger.info("Terms obtained.");
         logger.info("Allocating additional computing resources...");
       
         TimeUnit.SECONDS.sleep(8);  //  gives CPU a short break to recover
 
+        logger.info("Resources allocated.");
         logger.info("Building inverted index...");
 
         //  runs  the SPIMI algorithm on the collection to build the inverted index
@@ -54,7 +56,7 @@ public class Main {
         spimi.spimi(docTerms, 0);  //  500,000 is a decent starting point for slowest simulations, collections hover around 5,700,000 tokens
         //spimi.clearData();  //  clears data created by spimi
 
-        logger.info("Inverted index construction complete!");
+        logger.info("Inverted index construction complete.");
 
         //  runs the query handler to fetch documents requested by the user
         QueryHandler queryHandler = new QueryHandler(spimi.getInvertedIndex(), documents);
