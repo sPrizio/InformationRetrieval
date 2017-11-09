@@ -5,17 +5,17 @@ import com.entity.Document;
 import com.entity.Term;
 import com.parsers.TotalParser;
 import com.query.QueryHandler;
-import com.ranking.Ranker;
 import com.spimi.SPIMI;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         //  configures logging pattern to show only the log message
         PropertyConfigurator.configure("java/resources/lib/log4j.properties");
 
@@ -34,7 +34,9 @@ public class Main {
             docTerms.addAll(document.getAllTerms());
         }
 
-        /*logger.info("Building inverted index...");
+        TimeUnit.SECONDS.sleep(8);  //  gives CPU a short break to recover
+
+        logger.info("Building inverted index...");
 
         //  runs  the SPIMI algorithm on the collection to build the inverted index
         SPIMI spimi = new SPIMI();
@@ -45,6 +47,6 @@ public class Main {
 
         //  runs the query handler to fetch documents requested by the user
         QueryHandler queryHandler = new QueryHandler(spimi.getInvertedIndex());
-        queryHandler.run();     //  accept new queries*/
+        queryHandler.run();     //  accept new queries
     }
 }

@@ -13,8 +13,8 @@ import java.util.List;
  * @author Stephen Prizio
  */
 public class Ranker {
-    private int k;
-    private int b;
+    private double k;
+    private double b;
     private List<Document> documents;
     private String[] query;
 
@@ -45,6 +45,8 @@ public class Ranker {
     //  METHODS
 
     public double okapiBM25() {
+        this.b = 0.75;
+        this.k = 1.6;
 
 
         return 0;
