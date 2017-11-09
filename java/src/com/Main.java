@@ -34,6 +34,7 @@ public class Main {
             docTerms.addAll(document.getAllTerms());
         }
 
+        logger.info("Recovering CPU processing time...");
         TimeUnit.SECONDS.sleep(8);  //  gives CPU a short break to recover
 
         logger.info("Building inverted index...");
@@ -46,7 +47,7 @@ public class Main {
         logger.info("Inverted index construction complete!");
 
         //  runs the query handler to fetch documents requested by the user
-        QueryHandler queryHandler = new QueryHandler(spimi.getInvertedIndex());
+        QueryHandler queryHandler = new QueryHandler(spimi.getInvertedIndex(), documents);
         queryHandler.run();     //  accept new queries
     }
 }

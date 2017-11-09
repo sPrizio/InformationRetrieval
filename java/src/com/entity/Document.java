@@ -93,12 +93,12 @@ public class Document {
      *
      * @return length of document
      */
-    public int getDocumentLength() {
+    public double getDocumentLength() {
         if (this.terms.isEmpty()) {
-            return getAllTerms().size();
+            return (double) getAllTerms().size();
         }
 
-        return this.terms.size();
+        return (double) this.terms.size();
     }
 
     /**

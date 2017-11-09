@@ -1,7 +1,9 @@
 package com.query;
 
 import com.entity.Dictionary;
+import com.entity.Document;
 import com.entity.Term;
+import com.ranking.Ranker;
 import org.apache.log4j.Logger;
 import org.tartarus.martin.Stemmer;
 
@@ -18,23 +20,27 @@ public class QueryHandler {
     private static final Logger logger = Logger.getLogger(QueryHandler.class);
     private String input;
     private Stemmer stemmer;
+    private Ranker ranker;
+    private List<Document> documents;
 
     /**
      * Regular constructor that takes an inverted index on which to perform lookups
      *
      * @param dictionary - inverted index
      */
-    public QueryHandler(Dictionary dictionary) {
+    public QueryHandler(Dictionary dictionary, List<Document> d) {
         this.invertedIndex = dictionary;
         this.input = "";
         this.stemmer = new Stemmer();
+        this.ranker = new Ranker(d, dictionary);
+        this.documents = d;
     }
 
     /**
      * Runs the query handler and accepts user input
      */
     public void run() {
-        logger.info("Welcome to Speemer! Type in a boolean query with 2 words separated by AND, OR and NOT to find some cool information! Type quit to exit");
+        logger.info("Welcome to Speemer! Type in a query to find some cool information! Type quit to exit");
         String[] inputParameters;
 
         do {
@@ -54,7 +60,7 @@ public class QueryHandler {
     private void control(String[] params) {
         if (params.length == 1) {
             Term term = new Term(filter(params[0]));
-            printResults(this.invertedIndex.getPostingList(term));
+            printResults(this.invertedIndex.getPostingList(term));  //  TODO: CONVERT THIS TO OKAPI RANKING ALSO
         } else {
             String[] cleaned = cleanInput(params);
 
@@ -244,15 +250,16 @@ public class QueryHandler {
      * @return intersection list of query
      */
     private Set<Integer> queryMatchNoOperators(String[] params) {
-        //TODO: test on dictioanry at home
         List<Set<Integer>> postings = new ArrayList<>();
+        List<Term> terms = new ArrayList<>();
 
         for (String s : params) {
             Term t = new Term(s);
+            terms.add(t);
             postings.add(this.invertedIndex.getPostingList(t));
         }
 
-        return match(postings);
+        return this.ranker.okapiBM25(terms, match(postings), this.documents);
     }
 
     /**
