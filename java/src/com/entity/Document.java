@@ -71,4 +71,17 @@ public class Document {
         return this.terms;
     }
 
+    /**
+     * Returns length of document (number of counted terms)
+     *
+     * @return length of document
+     */
+    public int getDocumentLength() {
+        if (this.terms.isEmpty()) {
+            return getAllTerms().size();
+        }
+
+        return this.terms.size();
+    }
+
 }
