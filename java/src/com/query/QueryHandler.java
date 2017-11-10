@@ -137,6 +137,7 @@ public class QueryHandler {
      * @return intersection list of query
      */
     private Set<Integer> queryMatchNoOperators(String[] params) {
+        logger.info("Searching...");
         List<Set<Integer>> postings = new ArrayList<>();
         List<Term> terms = new ArrayList<>();
 
@@ -146,7 +147,7 @@ public class QueryHandler {
             postings.add(this.invertedIndex.getPostingList(t));
         }
 
-        return this.ranker.okapiBM25(terms, match(postings), this.documents);
+        return this.ranker.okapiBM25(terms, match(postings, postings.get(0), 0), this.documents);
     }
 
     /**
@@ -178,18 +179,14 @@ public class QueryHandler {
      * @param list - list of postings lists
      * @return list of common elements
      */
-    private Set<Integer> match(List<Set<Integer>> list) {
-        List<Set<Integer>> s = new ArrayList<>();
-
-        for (int i = 0; i < list.size() - 1; ++i) {
-            s.add(intersection(list.get(i), list.get(i + 1)));
+    private Set<Integer> match(List<Set<Integer>> list, Set<Integer> set, int counter) {
+        if (counter == list.size() - 1) {
+            return set;
         }
 
-        if (s.size() == 1) {
-            return s.get(0);
-        }
+        Set<Integer> i = intersection(set, list.get(counter + 1));
 
-        return match(s);
+        return match(list, i, counter + 1);
     }
 
 }
