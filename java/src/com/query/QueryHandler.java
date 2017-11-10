@@ -29,6 +29,7 @@ public class QueryHandler {
      * Regular constructor that takes an inverted index on which to perform lookups
      *
      * @param dictionary - inverted index
+     * @param d - list of documents
      */
     public QueryHandler(Dictionary dictionary, List<Document> d) {
         this.invertedIndex = dictionary;
@@ -177,6 +178,8 @@ public class QueryHandler {
      * Finds the intersection of multiple sets
      *
      * @param list - list of postings lists
+     * @param set - current intersection set
+     * @param counter - current index of set list
      * @return list of common elements
      */
     private Set<Integer> match(List<Set<Integer>> list, Set<Integer> set, int counter) {

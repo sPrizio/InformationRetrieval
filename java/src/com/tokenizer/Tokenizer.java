@@ -32,6 +32,7 @@ public class Tokenizer {
     /**
      * Returns a list of tokens
      *
+     * @param text - document text
      * @return list of tokens from file
      */
     public List<String> getTokens(String text) {

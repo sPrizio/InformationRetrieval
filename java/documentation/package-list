@@ -1,5 +1,7 @@
 com
 com.entity
 com.parsers
+com.query
+com.ranking
 com.spimi
 com.tokenizer

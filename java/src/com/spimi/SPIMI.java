@@ -50,6 +50,7 @@ public class SPIMI {
         return this.invertedIndex;
     }
 
+
     //  METHODS
 
     /**
@@ -57,6 +58,7 @@ public class SPIMI {
      *
      * @param terms - terms to be indexed
      * @param memoryLimit - maximum number of terms for one chunk to stimulate a memory limitation, 0 means unlimited
+     * @return inverted index file
      */
     public File spimi(List<Term> terms, int memoryLimit) {
         List<List<Term>> chunks = new ArrayList<>();
