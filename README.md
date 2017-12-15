@@ -6,7 +6,7 @@ Feel free to review and consult this code for your own projects. If you enjoyed 
 Cheers :)
 
 ### Authors
-* Stephen Prizio @sPrizio
+* Stephen Prizio @sPrizio https://www.saprizio.com
 
 ##### Copyright Stephen Prizio 2017
 ##### This software is licensed under the GNU General Public License 3.0.
